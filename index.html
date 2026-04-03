@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Governance Risk Assessment</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0c10;--s1:#12151c;--s2:#181c26;--s3:#1f2430;
+  --brd:#262c3a;--brd2:#323a4e;
+  --t1:#e6e8ef;--t2:#9da3b5;--t3:#636a7e;
+  --blue:#4a7cef;--blue-d:#3a62c2;--blue-g:rgba(74,124,239,.1);
+  --grn:#2dd4a0;--grn-g:rgba(45,212,160,.1);
+  --ylw:#f5bc3c;--ylw-g:rgba(245,188,60,.1);
+  --red:#ef5f5f;--red-g:rgba(239,95,95,.1);
+  --org:#f0923a;--org-g:rgba(240,146,58,.1);
+  --r:10px;--r2:14px;
+}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--t1);line-height:1.6;min-height:100vh}
+
+/* HEADER */
+.hdr{background:linear-gradient(135deg,#0f1219,#151a26);border-bottom:1px solid var(--brd);padding:20px 0;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+.hdr-in{max-width:920px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+.hdr-brand{display:flex;align-items:center;gap:12px}
+.hdr-mark{width:36px;height:36px;background:linear-gradient(135deg,var(--blue),#6c5ce7);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.hdr h1{font-family:'Fraunces',serif;font-size:19px;font-weight:500;letter-spacing:-.3px}
+.hdr-sub{font-size:11px;color:var(--t3);letter-spacing:1.2px;text-transform:uppercase;margin-top:1px}
+.steps{display:flex;align-items:center;gap:6px}
+.step-d{width:28px;height:28px;border-radius:50%;border:2px solid var(--brd);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--t3);transition:.3s}
+.step-d.on{border-color:var(--blue);background:var(--blue-g);color:var(--blue)}
+.step-d.done{border-color:var(--grn);background:var(--grn-g);color:var(--grn)}
+.step-l{width:22px;height:2px;background:var(--brd);transition:.3s}
+.step-l.on{background:var(--blue)}
+
+/* LAYOUT */
+.wrap{max-width:920px;margin:0 auto;padding:28px 24px 72px}
+.view{display:none;animation:up .45s ease}.view.on{display:block}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* CARDS */
+.cd{background:var(--s1);border:1px solid var(--brd);border-radius:var(--r2);padding:24px;margin-bottom:18px}
+.cd-h{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.cd-ico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.cd h2{font-family:'Fraunces',serif;font-size:18px;font-weight:500}
+.cd-d{color:var(--t2);font-size:13px;margin-bottom:20px;padding-left:42px}
+
+/* INTRO */
+.intro{background:linear-gradient(135deg,#131722,#171d2c);border:1px solid var(--brd);border-radius:var(--r2);padding:36px 32px;margin-bottom:24px;position:relative;overflow:hidden}
+.intro::after{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;background:radial-gradient(circle,rgba(74,124,239,.07),transparent 70%);border-radius:50%}
+.intro h2{font-family:'Fraunces',serif;font-size:24px;font-weight:500;margin-bottom:10px}
+.intro p{color:var(--t2);font-size:14px;max-width:640px;line-height:1.7}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.badge{background:var(--s3);border:1px solid var(--brd);border-radius:18px;padding:5px 12px;font-size:11px;color:var(--t2);letter-spacing:.2px}
+
+/* FORMS */
+.fg{margin-bottom:22px}
+.fl{display:block;font-size:13px;font-weight:500;margin-bottom:8px}.fl .rq{color:var(--red);margin-left:2px}
+input[type="text"],textarea,select{width:100%;background:var(--s2);border:1px solid var(--brd);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--t1);font-family:inherit;transition:border .2s}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-g)}
+textarea{resize:vertical;min-height:64px}
+select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%23636a7e' d='M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+
+/* OPTION TILES */
+.og{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:580px){.og{grid-template-columns:1fr}}
+.ot{background:var(--s2);border:1.5px solid var(--brd);border-radius:var(--r);padding:12px 14px;cursor:pointer;transition:.2s;display:flex;align-items:flex-start;gap:10px}
+.ot:hover{border-color:var(--brd2);background:var(--s3)}
+.ot.sel{border-color:var(--blue);background:var(--blue-g)}
+.otr{width:16px;height:16px;border-radius:50%;border:2px solid var(--brd2);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:.2s}
+.ot.sel .otr{border-color:var(--blue)}
+.otri{width:7px;height:7px;border-radius:50%;background:var(--blue);transform:scale(0);transition:.2s}
+.ot.sel .otri{transform:scale(1)}
+.otl{font-size:13px;font-weight:500}.otd{font-size:11px;color:var(--t3);margin-top:1px}
+
+/* CHECK TILES */
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:580px){.cg{grid-template-columns:1fr}}
+.ct{background:var(--s2);border:1.5px solid var(--brd);border-radius:var(--r);padding:12px 14px;cursor:pointer;transition:.2s;display:flex;align-items:flex-start;gap:10px}
+.ct:hover{border-color:var(--brd2)}
+.ct.sel{border-color:var(--blue);background:var(--blue-g)}
+.cb{width:16px;height:16px;border-radius:4px;border:2px solid var(--brd2);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:.2s;font-size:10px;color:transparent}
+.ct.sel .cb{border-color:var(--blue);background:var(--blue);color:#fff}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 24px;border:none;border-radius:8px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:.2s}
+.btn-p{background:var(--blue);color:#fff}.btn-p:hover{background:var(--blue-d)}.btn-p:disabled{opacity:.35;cursor:not-allowed}
+.btn-o{background:transparent;border:1.5px solid var(--brd);color:var(--t2)}.btn-o:hover{border-color:var(--blue);color:var(--blue)}
+.btn-g{background:transparent;color:var(--t2);padding:10px 14px}.btn-g:hover{color:var(--blue)}
+.brow{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+
+/* RISK METER */
+.rm{background:var(--s1);border:1px solid var(--brd);border-radius:var(--r2);padding:28px;margin:24px 0}
+.rm-track{width:100%;height:7px;background:var(--s3);border-radius:4px;margin:14px 0;overflow:hidden}
+.rm-fill{height:100%;border-radius:4px;transition:width .8s ease,background .4s}
+.rm-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px}
+.rm-badge{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:7px;font-size:14px;font-weight:600}
+
+/* SCREENING RESULT */
+.sr{background:var(--s1);border:1px solid var(--brd);border-radius:var(--r2);padding:32px;margin-top:20px;text-align:center}
+.sr h3{font-family:'Fraunces',serif;font-size:22px;margin-bottom:10px}
+.sr p{color:var(--t2);max-width:580px;margin:0 auto 20px;font-size:13px}
+.fl-list{text-align:left;max-width:560px;margin:0 auto 20px}
+.fl-item{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--brd);font-size:13px}
+.fl-ico{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+
+/* DEEP ASSESSMENT */
+.dnav{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:24px}
+.dtab{padding:7px 12px;border-radius:7px;font-size:12px;font-weight:500;cursor:pointer;transition:.2s;border:1px solid var(--brd);background:var(--s1);color:var(--t2)}
+.dtab:hover{border-color:var(--brd2)}.dtab.on{border-color:var(--blue);color:var(--blue);background:var(--blue-g)}
+.tscore{display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:5px}
+.dsec{display:none}.dsec.on{display:block;animation:up .3s ease}
+.qc{background:var(--s1);border:1px solid var(--brd);border-radius:var(--r);padding:20px;margin-bottom:14px}
+.qt{font-size:14px;font-weight:500;margin-bottom:3px}
+.qr{font-size:10px;color:var(--t3);margin-bottom:12px;display:flex;gap:6px;flex-wrap:wrap}
+.qr span{background:var(--s3);padding:2px 7px;border-radius:3px}
+.arow{display:flex;gap:7px}
+.abtn{flex:1;padding:9px 12px;border:1.5px solid var(--brd);border-radius:7px;background:var(--s2);color:var(--t2);font-size:12px;font-weight:500;cursor:pointer;transition:.2s;font-family:inherit}
+.abtn:hover{border-color:var(--brd2)}
+.abtn.s0{border-color:var(--grn);background:var(--grn-g);color:var(--grn)}
+.abtn.s1{border-color:var(--ylw);background:var(--ylw-g);color:var(--ylw)}
+.abtn.s2{border-color:var(--red);background:var(--red-g);color:var(--red)}
+
+/* PROGRESS */
+.pbar{width:100%;height:3px;background:var(--s3);border-radius:2px;margin-bottom:24px}
+.pfill{height:100%;background:var(--blue);border-radius:2px;transition:width .5s ease}
+
+/* REPORT */
+.rsec{margin-bottom:28px}
+.rsec h3{font-family:'Fraunces',serif;font-size:18px;margin-bottom:14px}
+.cht{background:var(--s1);border:1px solid var(--brd);border-radius:var(--r);padding:20px;margin-bottom:16px}
+.cht canvas{max-height:320px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:680px){.fgrid{grid-template-columns:1fr}}
+.fcd{background:var(--s1);border:1px solid var(--brd);border-radius:var(--r);padding:16px}
+.fcd h4{font-size:13px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:7px}
+.fcd p{font-size:12px;color:var(--t2)}
+.fsc{display:inline-block;padding:2px 8px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.4px}
+.fsc-l{background:var(--grn-g);color:var(--grn)}.fsc-m{background:var(--ylw-g);color:var(--ylw)}.fsc-h{background:var(--red-g);color:var(--red)}
+
+.rec{background:var(--s1);border-left:3px solid var(--blue);border-radius:0 var(--r) var(--r) 0;padding:16px 18px;margin-bottom:10px}
+.rec .rp{font-size:10px;text-transform:uppercase;letter-spacing:.8px;font-weight:700;margin-bottom:3px}
+.rec h4{font-size:14px;font-weight:600;margin-bottom:3px}
+.rec p{font-size:12px;color:var(--t2);line-height:1.6}
+.rec .rr{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.rec .rr span{background:var(--s3);padding:2px 7px;border-radius:3px;font-size:10px;color:var(--t3)}
+
+.rdmp{display:flex;gap:14px;margin-bottom:16px;padding-left:18px;border-left:2px solid var(--brd);position:relative}
+.rdmp::before{content:'';position:absolute;left:-5px;top:3px;width:8px;height:8px;border-radius:50%;background:var(--blue);border:2px solid var(--bg)}
+.rdmp .rt{font-size:11px;color:var(--blue);font-weight:600;min-width:72px;padding-top:1px}
+.rdmp .rc h4{font-size:13px;font-weight:600;margin-bottom:3px}
+.rdmp .rc p{font-size:12px;color:var(--t2)}
+
+.bm-row{display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid var(--brd)}
+.bm-row:last-child{border-bottom:none}
+.bm-dom{font-size:12px;font-weight:500;min-width:120px}
+.bm-track{flex:1;height:5px;background:var(--s3);border-radius:3px;position:relative}
+.bm-fill{height:100%;border-radius:3px;position:absolute;top:0;left:0}
+.bm-marker{position:absolute;top:-4px;width:2px;height:13px;background:var(--t1);border-radius:1px}
+.bm-val{font-size:11px;color:var(--t3);min-width:90px;text-align:right}
+
+.rmt{width:100%;border-collapse:collapse;font-size:12px}
+.rmt th{background:var(--s2);padding:8px 12px;text-align:left;font-weight:600;color:var(--t2);border-bottom:1px solid var(--brd)}
+.rmt td{padding:8px 12px;border-bottom:1px solid var(--brd);vertical-align:top}
+.rtag{display:inline-block;background:var(--s3);padding:2px 6px;border-radius:3px;font-size:10px;margin:1px 2px;color:var(--t2)}
+
+.lr-banner{text-align:center;padding:40px 28px}
+.lr-ico{width:64px;height:64px;border-radius:50%;background:var(--grn-g);display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 16px}
+.lr-cond{text-align:left;max-width:520px;margin:0 auto 24px}
+.lr-cond li{padding:5px 0;font-size:13px;color:var(--t2);list-style:none;display:flex;align-items:center;gap:7px}
+
+.divider{height:1px;background:var(--brd);margin:24px 0}
+.hidden{display:none!important}
+
+/* FINE PRINT */
+.fine-print{text-align:center;padding:32px 24px 16px;font-size:10px;color:var(--t3);line-height:1.6;border-top:1px solid var(--brd);margin-top:32px}
+.fine-print a{color:var(--t3);text-decoration:underline}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <div class="hdr-brand">
+      <div class="hdr-mark">🛡</div>
+      <div>
+        <h1>AI Governance Risk Assessment</h1>
+        <div class="hdr-sub">Canadian Financial Services</div>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step-d on" id="sd1">1</div>
+      <div class="step-l" id="sl1"></div>
+      <div class="step-d" id="sd2">2</div>
+      <div class="step-l" id="sl2"></div>
+      <div class="step-d" id="sd3">3</div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ===== STAGE 1: SCREENER ===== -->
+<div class="view on" id="v1">
+  <div class="intro">
+    <h2>AI Use Case Risk Screener</h2>
+    <p>Determine whether your AI use case requires a comprehensive governance assessment. This screening evaluates data sensitivity, service criticality, regulatory exposure, and deployment scope against Canadian regulatory expectations.</p>
+    <div class="badges">
+      <span class="badge">OSFI E-23 / B-13</span>
+      <span class="badge">PIPEDA / CPPA</span>
+      <span class="badge">NIST AI RMF</span>
+      <span class="badge">ISO/IEC 42001</span>
+      <span class="badge">EDGE Principles</span>
+    </div>
+  </div>
+
+  <!-- Context -->
+  <div class="cd">
+    <div class="cd-h"><div class="cd-ico" style="background:var(--blue-g);color:var(--blue)">📋</div><h2>Use Case Context</h2></div>
+    <div class="cd-d">Identify the AI system under evaluation.</div>
+    <div class="fg">
+      <label class="fl">AI System / Use Case Name <span class="rq">*</span></label>
+      <input type="text" id="s1_name" placeholder="e.g. Automated Credit Adjudication Model">
+    </div>
+    <div class="fg">
+      <label class="fl">Brief Description</label>
+      <textarea id="s1_desc" placeholder="What does this AI system do? Who uses it? What decisions does it support?"></textarea>
+    </div>
+    <div class="fg">
+      <label class="fl">Institution Type <span class="rq">*</span></label>
+      <select id="s1_inst">
+        <option value="">Select...</option>
+        <option value="bank">Bank / Deposit-Taking Institution</option>
+        <option value="insurer">Life or P&C Insurance Company</option>
+        <option value="trust">Trust & Loan Company</option>
+        <option value="wealth">Asset / Wealth Manager</option>
+        <option value="credit">Credit Union / Caisse populaire</option>
+        <option value="fintech">Fintech / Payment Provider</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Data Sensitivity -->
+  <div class="cd">
+    <div class="cd-h"><div class="cd-ico" style="background:var(--red-g);color:var(--red)">🔒</div><h2>Data Sensitivity Classification</h2></div>
+    <div class="cd-d">What data does this AI system process, ingest, or generate?</div>
+    <div class="fg">
+      <label class="fl">Data categories involved <span class="rq">*</span></label>
+      <div class="cg" id="s1_data">
+        <div class="ct" data-val="pii" data-w="2"><div class="cb">✓</div><div><div class="otl">Personal Information (PI)</div><div class="otd">Names, addresses, identifiers per PIPEDA</div></div></div>
+        <div class="ct" data-val="financial" data-w="3"><div class="cb">✓</div><div><div class="otl">Financial / Account Data</div><div class="otd">Account numbers, transactions, credit files</div></div></div>
+        <div class="ct" data-val="credit" data-w="3"><div class="cb">✓</div><div><div class="otl">Credit Bureau / Scoring Data</div><div class="otd">Equifax/TransUnion data, creditworthiness</div></div></div>
+        <div class="ct" data-val="health" data-w="3"><div class="cb">✓</div><div><div class="otl">Health / Insurance Claims Data</div><div class="otd">Medical underwriting, claims, PHI</div></div></div>
+        <div class="ct" data-val="biometric" data-w="3"><div class="cb">✓</div><div><div class="otl">Biometric Data</div><div class="otd">Facial, voice, behavioural biometrics</div></div></div>
+        <div class="ct" data-val="behavioral" data-w="1"><div class="cb">✓</div><div><div class="otl">Behavioural / Analytics Data</div><div class="otd">Usage patterns, browsing, app telemetry</div></div></div>
+        <div class="ct" data-val="aml" data-w="2"><div class="cb">✓</div><div><div class="otl">AML / KYC Data</div><div class="otd">Identity verification, sanctions, PEPs</div></div></div>
+        <div class="ct" data-val="public" data-w="0"><div class="cb">✓</div><div><div class="otl">Public / Non-Sensitive Data</div><div class="otd">Market data, public filings, open datasets</div></div></div>
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">Data volume & cross-border scope</label>
+      <div class="og" id="s1_scope">
+        <div class="ot" data-val="small" data-w="0"><div class="otr"><div class="otri"></div></div><div><div class="otl">Small / Single province</div><div class="otd">&lt;10K records, domestic only</div></div></div>
+        <div class="ot" data-val="medium" data-w="1"><div class="otr"><div class="otri"></div></div><div><div class="otl">Medium / Multi-province</div><div class="otd">10K–1M records, Canada-wide</div></div></div>
+        <div class="ot" data-val="large" data-w="2"><div class="otr"><div class="otri"></div></div><div><div class="otl">Large / Cross-border</div><div class="otd">1M+ records, includes US or international</div></div></div>
+        <div class="ot" data-val="critical" data-w="3"><div class="otr"><div class="otri"></div></div><div><div class="otl">Critical / Global</div><div class="otd">Systemic scale, multiple jurisdictions</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Service Criticality -->
+  <div class="cd">
+    <div class="cd-h"><div class="cd-ico" style="background:var(--org-g);color:var(--org)">⚡</div><h2>Decision Impact & Autonomy</h2></div>
+    <div class="cd-d">How does this AI system influence decisions and outcomes?</div>
+    <div class="fg">
+      <label class="fl">Level of autonomy <span class="rq">*</span></label>
+      <div class="og" id="s1_auto">
+        <div class="ot" data-val="assist" data-w="0"><div class="otr"><div class="otri"></div></div><div><div class="otl">Assistive / Informational</div><div class="otd">Supports human decisions, no direct action</div></div></div>
+        <div class="ot" data-val="recommend" data-w="1"><div class="otr"><div class="otri"></div></div><div><div class="otl">Recommendation</div><div class="otd">Suggests actions, human reviews before execution</div></div></div>
+        <div class="ot" data-val="semi" data-w="2"><div class="otr"><div class="otri"></div></div><div><div class="otl">Semi-Autonomous</div><div class="otd">Executes with human override capability</div></div></div>
+        <div class="ot" data-val="auto" data-w="3"><div class="otr"><div class="otri"></div></div><div><div class="otl">Fully Autonomous</div><div class="otd">Decides and executes without human review</div></div></div>
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">High-impact decision areas</label>
+      <div class="cg" id="s1_impact">
+        <div class="ct" data-val="credit" data-w="3"><div class="cb">✓</div><div><div class="otl">Credit Adjudication</div><div class="otd">Loan approvals, credit limits, scoring</div></div></div>
+        <div class="ct" data-val="underwriting" data-w="3"><div class="cb">✓</div><div><div class="otl">Insurance Underwriting</div><div class="otd">Risk pricing, policy issuance, claims</div></div></div>
+        <div class="ct" data-val="aml" data-w="2"><div class="cb">✓</div><div><div class="otl">AML / Fraud Detection</div><div class="otd">Transaction monitoring, SAR filing</div></div></div>
+        <div class="ct" data-val="trading" data-w="3"><div class="cb">✓</div><div><div class="otl">Trading / Portfolio</div><div class="otd">Algorithmic trading, allocation, risk</div></div></div>
+        <div class="ct" data-val="kyc" data-w="2"><div class="cb">✓</div><div><div class="otl">KYC / Client Onboarding</div><div class="otd">Identity verification, suitability</div></div></div>
+        <div class="ct" data-val="collections" data-w="2"><div class="cb">✓</div><div><div class="otl">Collections / Servicing</div><div class="otd">Account management, workout decisions</div></div></div>
+        <div class="ct" data-val="genai" data-w="1"><div class="cb">✓</div><div><div class="otl">GenAI / Content Generation</div><div class="otd">Client communications, documents, reports</div></div></div>
+        <div class="ct" data-val="none" data-w="0"><div class="cb">✓</div><div><div class="otl">None of the Above</div><div class="otd">Internal tooling, operational efficiency</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Regulatory Exposure -->
+  <div class="cd">
+    <div class="cd-h"><div class="cd-ico" style="background:var(--ylw-g);color:var(--ylw)">📜</div><h2>Regulatory Exposure</h2></div>
+    <div class="cd-d">Which regulatory frameworks apply?</div>
+    <div class="fg">
+      <div class="cg" id="s1_regs">
+        <div class="ct" data-val="osfi" data-w="3"><div class="cb">✓</div><div><div class="otl">OSFI E-23 / B-13</div><div class="otd">Model risk management, technology risk</div></div></div>
+        <div class="ct" data-val="pipeda" data-w="2"><div class="cb">✓</div><div><div class="otl">PIPEDA / CPPA</div><div class="otd">Federal privacy, automated decisions</div></div></div>
+        <div class="ct" data-val="quebec" data-w="2"><div class="cb">✓</div><div><div class="otl">Quebec Law 25 / AMF</div><div class="otd">Provincial privacy, AI guideline</div></div></div>
+        <div class="ct" data-val="pcmltfa" data-w="2"><div class="cb">✓</div><div><div class="otl">PCMLTFA / FINTRAC</div><div class="otd">Anti-money laundering, terrorist financing</div></div></div>
+        <div class="ct" data-val="humanrights" data-w="2"><div class="cb">✓</div><div><div class="otl">Canadian Human Rights Act</div><div class="otd">Anti-discrimination, fair treatment</div></div></div>
+        <div class="ct" data-val="sec" data-w="1"><div class="cb">✓</div><div><div class="otl">CSA / Provincial Securities</div><div class="otd">Securities regulation, suitability</div></div></div>
+        <div class="ct" data-val="crossborder" data-w="2"><div class="cb">✓</div><div><div class="otl">Cross-border (EU AI Act / US)</div><div class="otd">International operations, data flows</div></div></div>
+        <div class="ct" data-val="none" data-w="0"><div class="cb">✓</div><div><div class="otl">None / Uncertain</div><div class="otd">No known regulatory requirements</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Model Provenance -->
+  <div class="cd">
+    <div class="cd-h"><div class="cd-ico" style="background:var(--blue-g);color:var(--blue)">🔗</div><h2>Model Provenance & Third-Party Risk</h2></div>
+    <div class="cd-d">Assess supply chain and vendor risk dimensions per OSFI B-10.</div>
+    <div class="fg">
+      <div class="og" id="s1_model">
+        <div class="ot" data-val="inhouse" data-w="0"><div class="otr"><div class="otri"></div></div><div><div class="otl">Built In-House</div><div class="otd">Full control, internal development</div></div></div>
+        <div class="ot" data-val="finetuned" data-w="1"><div class="otr"><div class="otri"></div></div><div><div class="otl">Fine-Tuned Foundation Model</div><div class="otd">Third-party base, custom training layer</div></div></div>
+        <div class="ot" data-val="api" data-w="2"><div class="otr"><div class="otri"></div></div><div><div class="otl">Third-Party API / SaaS</div><div class="otd">Vendor-managed, API access</div></div></div>
+        <div class="ot" data-val="unknown" data-w="3"><div class="otr"><div class="otri"></div></div><div><div class="otl">Unknown / Unassessed</div><div class="otd">Provenance not documented</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="brow" style="justify-content:center">
+    <button class="btn btn-p" id="runScreener" onclick="runScreener()">Run Risk Screening →</button>
+  </div>
+  <div id="screenerResult" class="hidden"></div>
+</div>
+
+<!-- ===== STAGE 2: DEEP ASSESSMENT ===== -->
+<div class="view" id="v2">
+  <div class="intro">
+    <h2>Deep Governance Assessment</h2>
+    <p id="v2intro">Complete the assessment across 8 governance domains to identify specific gaps and receive prioritized remediation guidance aligned to OSFI, PIPEDA, and international standards.</p>
+    <div class="badges" id="v2badges"></div>
+  </div>
+  <div class="pbar"><div class="pfill" id="prog" style="width:0%"></div></div>
+  <div class="dnav" id="dnav"></div>
+  <div id="dsecs"></div>
+  <div class="brow" style="justify-content:center">
+    <button class="btn btn-g" onclick="go(1)">← Back to Screener</button>
+    <button class="btn btn-p" id="genRpt" onclick="genReport()">Generate Governance Report →</button>
+  </div>
+</div>
+
+<!-- ===== STAGE 3: REPORT ===== -->
+<div class="view" id="v3">
+  <div id="rptContent"></div>
+  <div class="brow" style="justify-content:center;margin-top:28px">
+    <button class="btn btn-g" onclick="go(2)">← Back to Assessment</button>
+    <button class="btn btn-o" onclick="exportRpt()">📄 Export Summary</button>
+    <button class="btn btn-p" onclick="window.print()">🖨 Print Report</button>
+  </div>
+  <div class="fine-print">
+    Assessment methodology informed by the iTechLaw Responsible AI Impact Assessment (RAIIA), NIST AI Risk Management Framework (AI RMF 1.0),<br>
+    ISO/IEC 42001, OSFI EDGE Principles, and the OECD AI Policy Framework. Not legal or compliance advice.<br>
+    © <span id="cpyr"></span> — For evaluation and governance planning purposes only.
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+document.getElementById('cpyr').textContent = new Date().getFullYear();
+
+// ============================================================
+//  DOMAINS — Canadian Financial Services Focus
+// ============================================================
+const DOMAINS = [
+  { id:'ethical', icon:'🎯', name:'Ethical Purpose & Societal Benefit', short:'Ethical Purpose',
+    desc:'Alignment with institutional values, EDGE principles, and societal impact',
+    questions:[
+      { text:"Has the AI system's intended purpose been documented and approved by an accountable governance body?", regs:['OSFI E-23 §1.1','NIST MAP 1.1','EDGE: Governance'] },
+      { text:"Has a societal or consumer impact assessment been conducted, including consideration of vulnerable groups?", regs:['OSFI FIFAI','FCAC Guidance','OECD AI Principle 1.2'] },
+    ]},
+  { id:'accountability', icon:'🤚', name:'Accountability & Governance', short:'Accountability',
+    desc:'Clear responsibility, OSFI-compliant governance structures, and model lifecycle oversight',
+    questions:[
+      { text:"Are clear roles and responsibilities defined for AI system oversight, including senior management accountability per OSFI expectations?", regs:['OSFI E-23 §1.1','OSFI Corporate Gov.','EDGE: Governance'] },
+      { text:"Is there a documented escalation and remediation process for AI-related harms or model failures?", regs:['OSFI E-23 §3.4','OSFI B-13 §6','PIPEDA Principle 1'] },
+    ]},
+  { id:'transparency', icon:'📊', name:'Transparency & Explainability', short:'Transparency',
+    desc:'Decision explainability, model documentation, and OSFI E-23 lifecycle transparency',
+    questions:[
+      { text:"Can the AI system provide meaningful explanations of key decisions to affected customers and regulators?", regs:['PIPEDA Principle 8','CPPA §63','OSFI E-23 §3.1','EDGE: Explainability'] },
+      { text:"Is documentation maintained on model design rationale, training data, methodology, and known limitations per OSFI E-23?", regs:['OSFI E-23 §3.1–3.3','NIST MAP 3.1','ISO 42001 §7.5'] },
+    ]},
+  { id:'fairness', icon:'⚖️', name:'Fairness & Non-Discrimination', short:'Fairness',
+    desc:'Equitable treatment, bias testing, and compliance with Canadian human rights standards',
+    questions:[
+      { text:"Has the system been tested for bias across prohibited grounds of discrimination under the Canadian Human Rights Act?", regs:['CHRA §3','OSFI FIFAI','EDGE: Ethics','NIST MEA 2.6'] },
+      { text:"Are there ongoing processes to monitor and mitigate discriminatory outcomes in production, particularly for credit and insurance decisions?", regs:['CHRA','FCAC Guidance','OSFI E-23 §3.4','EDGE: Ethics'] },
+    ]},
+  { id:'safety', icon:'🔐', name:'Safety, Reliability & Resilience', short:'Safety',
+    desc:'Robust operation, model validation, and OSFI operational resilience expectations',
+    questions:[
+      { text:"Has the model undergone independent validation, testing, and challenge before deployment per OSFI E-23 review requirements?", regs:['OSFI E-23 §3.2','OSFI B-13 §5','NIST MEA 1.1'] },
+      { text:"Are controls in place for model monitoring, drift detection, and incident response including OSFI cyber resilience expectations?", regs:['OSFI E-23 §3.4','OSFI B-13 §7','EDGE: Governance'] },
+    ]},
+  { id:'data', icon:'📦', name:'Data Governance & Quality', short:'Data Gov.',
+    desc:'Data quality, lineage, and governance aligned to OSFI E-23 data expectations',
+    questions:[
+      { text:"Is training and input data subject to quality controls including accuracy, completeness, relevance, and fitness-for-use assessments?", regs:['OSFI E-23 §3.1','NIST MAP 2.3','EDGE: Data'] },
+      { text:"Are data lineage, provenance, and sourcing practices documented and auditable, including for third-party data?", regs:['OSFI E-23 §3.1','OSFI B-10','PIPEDA Principle 4'] },
+    ]},
+  { id:'privacy', icon:'🛡', name:'Privacy & Data Protection', short:'Privacy',
+    desc:'PIPEDA / CPPA compliance, automated decision-making transparency, and cross-border data governance',
+    questions:[
+      { text:"Is personal information processed with documented legal basis, meaningful consent, and data minimization per PIPEDA / CPPA?", regs:['PIPEDA Principle 3','CPPA §15','Quebec Law 25 Art.12'] },
+      { text:"Are privacy-by-design principles integrated, including PIAs, de-identification safeguards, and cross-border transfer controls?", regs:['PIPEDA Principle 7','CPPA §69','OSFI B-13 §4'] },
+    ]},
+  { id:'thirdparty', icon:'🔗', name:'Third-Party & IP Risk', short:'Third-Party/IP',
+    desc:'Vendor governance, model supply chain risk, and IP protection per OSFI B-10',
+    questions:[
+      { text:"Are third-party AI vendors subject to due diligence, contractual controls, and ongoing oversight aligned to OSFI B-10 expectations?", regs:['OSFI B-10','OSFI E-23 §2.1','NIST GOV 1.6'] },
+      { text:"Is there a documented framework for IP ownership, licensing, and attribution for AI-generated outputs and training data?", regs:['Copyright Act','OSFI B-10','IP Law'] },
+    ]}
+];
+
+const BENCHMARKS = {
+  bank:    { ethical:1.1, accountability:0.9, transparency:1.3, fairness:1.2, safety:0.7, data:1.0, privacy:0.9, thirdparty:1.2 },
+  insurer: { ethical:1.2, accountability:1.0, transparency:1.4, fairness:1.3, safety:0.8, data:1.1, privacy:1.0, thirdparty:1.1 },
+  trust:   { ethical:1.3, accountability:1.1, transparency:1.3, fairness:1.2, safety:0.9, data:1.1, privacy:1.0, thirdparty:1.3 },
+  wealth:  { ethical:1.2, accountability:1.1, transparency:1.5, fairness:1.2, safety:0.9, data:1.2, privacy:1.1, thirdparty:1.4 },
+  credit:  { ethical:1.3, accountability:1.2, transparency:1.4, fairness:1.3, safety:1.0, data:1.2, privacy:1.1, thirdparty:1.2 },
+  fintech: { ethical:1.4, accountability:1.3, transparency:1.5, fairness:1.3, safety:1.1, data:1.3, privacy:1.2, thirdparty:1.5 }
+};
+
+const CONTROLS = {
+  ethical: { foundation:'Document purpose statement and register AI system in enterprise model inventory.', intermediate:'Conduct consumer/societal impact assessment with stakeholder consultation per OSFI EDGE.', advanced:'Establish ethics review board with veto authority, public reporting, and ongoing impact monitoring.' },
+  accountability: { foundation:'Assign accountable model owner per OSFI E-23 with documented oversight responsibilities.', intermediate:'Implement RACI matrix, incident playbooks, and senior management reporting on model risk.', advanced:'Board-level AI governance committee, independent audit cycles, integrated regulatory reporting.' },
+  transparency: { foundation:'Maintain model cards and lifecycle documentation per OSFI E-23 §3.1 requirements.', intermediate:'Deploy explainability tools, decision trace logging, and customer-facing disclosures per CPPA §63.', advanced:'Real-time auditability, external audit readiness, regulatory-grade documentation systems.' },
+  fairness: { foundation:'Pre-deployment bias testing across CHRA prohibited grounds for all customer-facing models.', intermediate:'Continuous fairness monitoring with automated alerting, remediation tracking, and FCAC reporting.', advanced:'Third-party fairness audits, intersectional analysis, and public transparency reporting.' },
+  safety: { foundation:'Independent model validation per OSFI E-23 §3.2 before deployment with documented test results.', intermediate:'Implement ML monitoring, drift detection, rollback procedures, and OSFI-aligned incident response.', advanced:'Continuous monitoring dashboards, circuit breakers, red-teaming, and cyber resilience testing (I-CRT alignment).' },
+  data: { foundation:'Establish data quality controls and fitness-for-use assessments per OSFI E-23 §3.1.', intermediate:'Implement data lineage tracking, version control, and third-party data governance reviews.', advanced:'Automated data quality pipelines, provenance tracking, and integrated audit trail across model lifecycle.' },
+  privacy: { foundation:'Implement PIPEDA-compliant consent mechanisms and data processing records for all AI systems.', intermediate:'Conduct PIAs per CPPA §69, implement de-identification safeguards, and cross-border transfer controls.', advanced:'Automated data subject rights fulfillment, privacy-preserving ML techniques, and continuous PIA updates.' },
+  thirdparty: { foundation:'Maintain vendor inventory with due diligence assessments aligned to OSFI B-10 requirements.', intermediate:'Implement contractual AI governance controls, ongoing vendor monitoring, and concentration risk assessment.', advanced:'Integrated vendor risk scoring, supply chain resilience testing, and IP clearance pipelines.' }
+};
+
+let S = { scr:{}, scrScore:0, scrTier:'', ans:{}, stage:1, aDom:0 };
+
+// ============================================================
+//  INTERACTION
+// ============================================================
+document.querySelectorAll('.ct').forEach(t => t.addEventListener('click', () => t.classList.toggle('sel')));
+document.querySelectorAll('.og').forEach(g => {
+  g.querySelectorAll('.ot').forEach(t => t.addEventListener('click', () => {
+    g.querySelectorAll('.ot').forEach(x => x.classList.remove('sel'));
+    t.classList.add('sel');
+  }));
+});
+
+function gSel(id, multi=false) {
+  const el = document.getElementById(id);
+  if (!el) return multi ? [] : null;
+  const sel = el.querySelectorAll('.sel');
+  if (multi) return Array.from(sel).map(s => ({ val:s.dataset.val, w:parseInt(s.dataset.w)||0 }));
+  if (sel.length) return { val:sel[0].dataset.val, w:parseInt(sel[0].dataset.w)||0 };
+  return null;
+}
+
+// ============================================================
+//  SCREENER
+// ============================================================
+function runScreener() {
+  const name = document.getElementById('s1_name').value.trim();
+  const inst = document.getElementById('s1_inst').value;
+  if (!name || !inst) return alert('Please fill in the use case name and institution type.');
+
+  const dt = gSel('s1_data',true), sc = gSel('s1_scope'), au = gSel('s1_auto'), im = gSel('s1_impact',true), rg = gSel('s1_regs',true), md = gSel('s1_model');
+
+  let score=0, max=0;
+  score += Math.min(dt.reduce((a,b)=>a+b.w,0), 9); max+=9;
+  if(sc) score+=sc.w; max+=3;
+  if(au) score+=au.w; max+=3;
+  score += Math.min(im.reduce((a,b)=>a+b.w,0), 9); max+=9;
+  score += Math.min(rg.reduce((a,b)=>a+b.w,0), 6); max+=6;
+  if(md) score+=md.w; max+=3;
+
+  const pct = max>0 ? (score/max)*100 : 0;
+  let tier,tCol,tBg;
+  if(pct<=20){tier='Low Risk';tCol='var(--grn)';tBg='var(--grn-g)';}
+  else if(pct<=45){tier='Medium Risk';tCol='var(--ylw)';tBg='var(--ylw-g)';}
+  else if(pct<=70){tier='High Risk';tCol='var(--org)';tBg='var(--org-g)';}
+  else{tier='Critical Risk';tCol='var(--red)';tBg='var(--red-g)';}
+
+  S.scr = { name, desc:document.getElementById('s1_desc').value, inst, dt, sc, au, im, rg, md };
+  S.scrScore = pct; S.scrTier = tier;
+
+  const factors = [];
+  const dw = dt.reduce((a,b)=>a+b.w,0);
+  if(dw>=3) factors.push({i:'🔴',c:'var(--red)',t:`High-sensitivity data: ${dt.filter(d=>d.w>=2).map(d=>d.val).join(', ')}`});
+  else if(dw>=1) factors.push({i:'🟡',c:'var(--ylw)',t:'Moderate data sensitivity'});
+  else factors.push({i:'🟢',c:'var(--grn)',t:'Low data sensitivity — non-personal data only'});
+
+  if(au&&au.w>=2) factors.push({i:'🔴',c:'var(--red)',t:`${au.w>=3?'Fully autonomous':'Semi-autonomous'} decision-making — elevated OSFI governance requirements`});
+  else if(au&&au.w>=1) factors.push({i:'🟡',c:'var(--ylw)',t:'Advisory role — moderate governance requirements'});
+  else factors.push({i:'🟢',c:'var(--grn)',t:'Assistive role — human retains decision authority'});
+
+  const iw = im.reduce((a,b)=>a+b.w,0);
+  if(iw>=3) factors.push({i:'🔴',c:'var(--red)',t:`High-impact domain(s): ${im.filter(x=>x.w>=2).map(x=>x.val).join(', ')}`});
+
+  const rw = rg.reduce((a,b)=>a+b.w,0);
+  if(rw>=4) factors.push({i:'🔴',c:'var(--red)',t:`Multiple regulatory frameworks: ${rg.filter(r=>r.w>=2).map(r=>r.val).join(', ')}`});
+  else if(rw>=2) factors.push({i:'🟡',c:'var(--ylw)',t:'Regulatory oversight applies'});
+
+  if(md&&md.w>=2) factors.push({i:'🟡',c:'var(--ylw)',t:'Third-party model dependency — OSFI B-10 supply chain risk applies'});
+
+  const needsDeep = pct > 20;
+  const el = document.getElementById('screenerResult');
+  el.classList.remove('hidden');
+  el.innerHTML = `
+    <div class="rm">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <h3 style="font-family:'Fraunces',serif;font-size:18px">Screening Result</h3>
+        <div class="rm-badge" style="background:${tBg};color:${tCol}">${tier}</div>
+      </div>
+      <div class="rm-track"><div class="rm-fill" style="width:${pct}%;background:${tCol}"></div></div>
+      <div class="rm-labels"><span>Low</span><span>Medium</span><span>High</span><span>Critical</span></div>
+    </div>
+    <div class="sr">
+      <h3>${needsDeep ? 'Full Governance Assessment Required' : 'Low Risk — Expedited Approval Pathway'}</h3>
+      <p>${needsDeep
+        ? 'Based on data sensitivity, decision impact, and regulatory exposure, a comprehensive governance assessment across all 8 domains is required before deployment, consistent with OSFI E-23 expectations.'
+        : 'This AI use case presents minimal governance risk. It may proceed through an expedited approval pathway with standard controls, subject to periodic review and model inventory registration.'
+      }</p>
+      <div class="fl-list">${factors.map(f=>`<div class="fl-item"><div class="fl-ico" style="background:${f.c}20;color:${f.c}">${f.i}</div><span>${f.t}</span></div>`).join('')}</div>
+      ${needsDeep ? `<button class="btn btn-p" onclick="go(2)">Proceed to Deep Assessment →</button>` : `
+        <div class="lr-banner">
+          <div class="lr-ico">✓</div>
+          <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:8px">Conditions for Low-Risk Approval</h3>
+          <ul class="lr-cond">
+            <li><span style="color:var(--grn)">✓</span> Register in enterprise model inventory per OSFI E-23</li>
+            <li><span style="color:var(--grn)">✓</span> Document use case rationale and data handling practices</li>
+            <li><span style="color:var(--grn)">✓</span> Conduct annual review of model performance and risk rating</li>
+            <li><span style="color:var(--grn)">✓</span> Ensure AI literacy training for system operators</li>
+            <li><span style="color:var(--grn)">✓</span> Establish incident escalation pathway</li>
+            <li><span style="color:var(--grn)">✓</span> Re-screen if scope, data types, or decision authority changes</li>
+          </ul>
+          <button class="btn btn-o" onclick="go(2)" style="margin-top:6px">Run Full Assessment Anyway →</button>
+        </div>`}
+    </div>`;
+  el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ============================================================
+//  NAVIGATION
+// ============================================================
+function go(n) {
+  S.stage=n;
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.getElementById('v'+n).classList.add('on');
+  for(let i=1;i<=3;i++){
+    const d=document.getElementById('sd'+i);d.classList.remove('on','done');
+    if(i<n)d.classList.add('done');else if(i===n)d.classList.add('on');
+  }
+  document.getElementById('sl1').classList.toggle('on',n>=2);
+  document.getElementById('sl2').classList.toggle('on',n>=3);
+  if(n===2)buildDeep();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ============================================================
+//  DEEP ASSESSMENT
+// ============================================================
+function buildDeep() {
+  const instNames={bank:'Bank',insurer:'Insurer',trust:'Trust & Loan',wealth:'Wealth Manager',credit:'Credit Union',fintech:'Fintech'};
+  document.getElementById('v2badges').innerHTML = `<span class="badge">${instNames[S.scr.inst]||'FRFI'}</span><span class="badge">${S.scrTier}</span><span class="badge">${S.scr.name}</span>`;
+
+  document.getElementById('dnav').innerHTML = DOMAINS.map((d,i)=>`<div class="dtab ${i===0?'on':''}" onclick="swDom(${i})" id="dt_${i}">${d.icon} ${d.short} <span class="tscore" id="ts_${i}"></span></div>`).join('');
+
+  document.getElementById('dsecs').innerHTML = DOMAINS.map((d,di)=>`
+    <div class="dsec ${di===0?'on':''}" id="ds_${di}">
+      <div class="cd">
+        <div class="cd-h"><div class="cd-ico" style="background:var(--blue-g);color:var(--blue)">${d.icon}</div><h2>${d.name}</h2></div>
+        <div class="cd-d">${d.desc}</div>
+        ${d.questions.map((q,qi)=>`
+          <div class="qc">
+            <div class="qt">${q.text}</div>
+            <div class="qr">${q.regs.map(r=>`<span>${r}</span>`).join('')}</div>
+            <div class="arow">
+              <button class="abtn" onclick="ans('${d.id}',${qi},0,this)">Compliant</button>
+              <button class="abtn" onclick="ans('${d.id}',${qi},1,this)">Partial</button>
+              <button class="abtn" onclick="ans('${d.id}',${qi},2,this)">Non-Compliant</button>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function swDom(i) { S.aDom=i; document.querySelectorAll('.dtab').forEach((t,j)=>t.classList.toggle('on',j===i)); document.querySelectorAll('.dsec').forEach((s,j)=>s.classList.toggle('on',j===i)); }
+
+function ans(did,qi,v,btn) {
+  S.ans[did+'_'+qi]=v;
+  btn.parentElement.querySelectorAll('.abtn').forEach(b=>b.className='abtn');
+  btn.classList.add('s'+v);
+  updProg();
+}
+
+function updProg() {
+  const tot=DOMAINS.reduce((a,d)=>a+d.questions.length,0);
+  const done=Object.keys(S.ans).length;
+  document.getElementById('prog').style.width=(done/tot*100)+'%';
+  DOMAINS.forEach((d,i)=>{
+    const sc=d.questions.map((_,qi)=>S.ans[d.id+'_'+qi]);
+    const dot=document.getElementById('ts_'+i);
+    if(sc.every(s=>s!==undefined)){const avg=sc.reduce((a,b)=>a+b,0)/sc.length;dot.style.background=avg<=0.5?'var(--grn)':avg<=1.2?'var(--ylw)':'var(--red)';}
+  });
+  document.getElementById('genRpt').disabled=done<tot;
+}
+
+// ============================================================
+//  REPORT
+// ============================================================
+function genReport() {
+  const tot=DOMAINS.reduce((a,d)=>a+d.questions.length,0);
+  if(Object.keys(S.ans).length<tot) return alert('Please answer all questions.');
+  go(3); renderRpt();
+}
+
+function renderRpt() {
+  const inst=S.scr.inst;
+  const bm=BENCHMARKS[inst]||BENCHMARKS.bank;
+  const ds={};let ts=0,tq=0;
+  DOMAINS.forEach(d=>{const sc=d.questions.map((_,qi)=>S.ans[d.id+'_'+qi]||0);const avg=sc.reduce((a,b)=>a+b,0)/sc.length;ds[d.id]=avg;ts+=sc.reduce((a,b)=>a+b,0);tq+=sc.length;});
+  const oa=ts/tq;
+  let oTier,oCol,oBg;
+  if(oa<=0.5){oTier='Low Risk';oCol='var(--grn)';oBg='var(--grn-g)';}
+  else if(oa<=1.2){oTier='Medium Risk';oCol='var(--ylw)';oBg='var(--ylw-g)';}
+  else{oTier='High Risk';oCol='var(--red)';oBg='var(--red-g)';}
+
+  const sorted=DOMAINS.slice().sort((a,b)=>ds[b.id]-ds[a.id]);
+  const hi=sorted.filter(d=>ds[d.id]>=1.5),md=sorted.filter(d=>ds[d.id]>=0.5&&ds[d.id]<1.5);
+
+  function tt(s){return s<0.5?'<span class="fsc fsc-l">LOW</span>':s<1.5?'<span class="fsc fsc-m">MEDIUM</span>':'<span class="fsc fsc-h">HIGH</span>';}
+  const instNames={bank:'Bank / Deposit-Taking Institution',insurer:'Insurer',trust:'Trust & Loan',wealth:'Wealth Manager',credit:'Credit Union',fintech:'Fintech'};
+
+  const rc=document.getElementById('rptContent');
+  rc.innerHTML = `
+    <div class="intro" style="margin-bottom:28px">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div><h2>Governance Assessment Report</h2><p style="margin-top:3px;font-size:13px;color:var(--t3)">${S.scr.name} — ${instNames[inst]||'FRFI'} — ${new Date().toLocaleDateString('en-CA',{year:'numeric',month:'long',day:'numeric'})}</p></div>
+        <div class="rm-badge" style="background:${oBg};color:${oCol};font-size:16px">${oTier}</div>
+      </div>
+      <div class="divider" style="margin:16px 0 12px"></div>
+      <p>This report presents findings from a comprehensive AI governance risk assessment covering 8 governance domains with ${tq} evaluation criteria, aligned to OSFI E-23, PIPEDA/CPPA, NIST AI RMF, and international standards. Results include domain-level risk scores, regulatory gap mapping, industry benchmarking, and a prioritized remediation roadmap.</p>
+    </div>
+
+    <div class="rsec"><h3>Risk by Domain</h3><div class="cht"><canvas id="radar"></canvas></div></div>
+
+    <div class="rsec"><h3>Risk Distribution</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="cht"><canvas id="bar"></canvas></div>
+        <div class="cht"><canvas id="donut"></canvas></div>
+      </div>
+    </div>
+
+    <div class="rsec"><h3>Industry Benchmarking</h3>
+      <div class="cd">
+        <p style="font-size:12px;color:var(--t3);margin-bottom:14px">Your scores vs. Canadian ${instNames[inst]||'FRFI'} median. The marker (▎) shows industry median.</p>
+        ${DOMAINS.map(d=>{const s=ds[d.id],b=bm[d.id],sp=(s/2)*100,bp=(b/2)*100,sc=s<0.5?'var(--grn)':s<1.5?'var(--ylw)':'var(--red)';
+        return `<div class="bm-row"><div class="bm-dom">${d.icon} ${d.short}</div><div class="bm-track"><div class="bm-fill" style="width:${sp}%;background:${sc};opacity:.7"></div><div class="bm-marker" style="left:${bp}%"></div></div><div class="bm-val">${s.toFixed(1)} / ${b.toFixed(1)} median</div></div>`;}).join('')}
+      </div>
+    </div>
+
+    <div class="rsec"><h3>Domain Findings</h3>
+      <div class="fgrid">${DOMAINS.map(d=>{const s=ds[d.id];return `<div class="fcd"><h4>${d.icon} ${d.short} ${tt(s)}</h4><p>${s>=1.5?'Significant governance gaps. Immediate remediation required per OSFI expectations.':s>=0.5?'Partial controls in place. Enhancement needed to meet regulatory expectations.':'Controls appear adequate. Maintain and periodically validate.'}</p></div>`;}).join('')}</div>
+    </div>
+
+    <div class="rsec"><h3>Regulatory Gap Mapping</h3>
+      <div class="cd" style="overflow-x:auto">
+        <table class="rmt"><thead><tr><th>Domain</th><th>Score</th><th>Applicable Regulations</th><th>Status</th></tr></thead><tbody>
+        ${DOMAINS.map(d=>{const s=ds[d.id];const regs=[...new Set(d.questions.flatMap(q=>q.regs))];
+        const st=s<0.5?'<span style="color:var(--grn)">● Compliant</span>':s<1.5?'<span style="color:var(--ylw)">● Gap Identified</span>':'<span style="color:var(--red)">● Non-Compliant Risk</span>';
+        return `<tr><td><strong>${d.icon} ${d.short}</strong></td><td>${s.toFixed(1)}</td><td>${regs.map(r=>'<span class="rtag">'+r+'</span>').join(' ')}</td><td>${st}</td></tr>`;}).join('')}
+        </tbody></table>
+      </div>
+    </div>
+
+    <div class="rsec"><h3>Prioritized Recommendations</h3>
+      ${sorted.filter(d=>ds[d.id]>=0.5).map((d,i)=>{const s=ds[d.id];const urg=s>=1.5?'Critical':'Important';const uc=s>=1.5?'var(--red)':'var(--ylw)';const ctrl=CONTROLS[d.id];const lv=s>=1.5?'foundation':'intermediate';
+      return `<div class="rec" style="border-left-color:${uc}"><div class="rp" style="color:${uc}">Priority ${i+1} — ${urg}</div><h4>${d.icon} ${d.name}</h4><p><strong>Gap:</strong> ${s>=1.5?'Foundational controls missing or not documented.':'Partial controls need strengthening.'}</p><p><strong>Action:</strong> ${ctrl[lv]}</p><p><strong>Target:</strong> ${ctrl.advanced}</p><div class="rr">${d.questions.flatMap(q=>q.regs).slice(0,4).map(r=>'<span>'+r+'</span>').join('')}</div></div>`;}).join('')}
+      ${sorted.filter(d=>ds[d.id]>=0.5).length===0?'<p style="color:var(--t2);font-size:13px">All domains compliant. Maintain controls and schedule periodic reassessment.</p>':''}
+    </div>
+
+    <div class="rsec"><h3>Remediation Roadmap</h3>
+      <div class="cd">
+        <div class="rdmp"><div class="rt">0–30 Days</div><div class="rc"><h4>Stabilization</h4><p>Address critical gaps. Establish foundational controls for ${hi.length?hi.map(d=>d.short).join(', '):'high-risk areas'}. Register all models in enterprise inventory per OSFI E-23. Assign accountable owners.</p></div></div>
+        <div class="rdmp"><div class="rt">30–90 Days</div><div class="rc"><h4>Foundation</h4><p>Deploy model documentation and validation processes. Implement PIPEDA/CPPA automated decision-making disclosures. Begin fairness testing across CHRA prohibited grounds.</p></div></div>
+        <div class="rdmp"><div class="rt">90–180 Days</div><div class="rc"><h4>Maturation</h4><p>Achieve intermediate maturity. Establish audit readiness for OSFI review. Implement continuous monitoring for ${md.length?md.map(d=>d.short).join(', '):'medium-risk domains'}. Conduct first independent validation cycle.</p></div></div>
+        <div class="rdmp"><div class="rt">180+ Days</div><div class="rc"><h4>Optimization</h4><p>Achieve advanced maturity. Deploy real-time governance dashboards. Complete I-CRT alignment. Target top-quartile benchmarks ahead of OSFI E-23 May 2027 effective date.</p></div></div>
+      </div>
+    </div>
+
+    <div class="rsec"><h3>TrustLayer Integration</h3>
+      <div class="cd" style="border-left:3px solid var(--blue)">
+        <p style="font-size:13px;color:var(--t2);margin-bottom:10px">Based on your assessment, TrustLayer capabilities that address identified gaps:</p>
+        ${hi.concat(md).slice(0,3).map(d=>{const map={transparency:'Decision Trace Logging — real-time auditability for OSFI review',accountability:'Governance Workflow Engine — RACI enforcement and approval chains',fairness:'Bias Monitoring Dashboard — continuous fairness metrics across CHRA grounds',safety:'ML Monitoring & Circuit Breakers — drift detection and incident response',privacy:'Data Governance Controls — PIPEDA/CPPA consent tracking and PII scanning',data:'Data Quality Engine — automated lineage tracking and fitness-for-use assessment',ethical:'Impact Assessment Module — structured societal impact evaluation',thirdparty:'Vendor Risk Module — B-10 aligned due diligence and ongoing monitoring'};
+        return `<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--brd)"><span style="color:var(--blue);font-size:16px">${d.icon}</span><div><strong style="font-size:13px">${d.short}:</strong> <span style="font-size:12px;color:var(--t2)">${map[d.id]||'Governance controls available'}</span></div></div>`;}).join('')}
+      </div>
+    </div>
+  `;
+  setTimeout(renderCharts,100);
+}
+
+function renderCharts() {
+  const ds={};DOMAINS.forEach(d=>{const sc=d.questions.map((_,qi)=>S.ans[d.id+'_'+qi]||0);ds[d.id]=sc.reduce((a,b)=>a+b,0)/sc.length;});
+  const labels=DOMAINS.map(d=>d.short),data=DOMAINS.map(d=>ds[d.id]),bench=DOMAINS.map(d=>(BENCHMARKS[S.scr.inst]||BENCHMARKS.bank)[d.id]),cols=data.map(v=>v<0.5?'#2dd4a0':v<1.5?'#f5bc3c':'#ef5f5f');
+  Chart.defaults.color='#9da3b5';Chart.defaults.borderColor='#262c3a';
+
+  new Chart(document.getElementById('radar'),{type:'radar',data:{labels,datasets:[{label:'Your Score',data,fill:true,backgroundColor:'rgba(74,124,239,.14)',borderColor:'#4a7cef',pointBackgroundColor:'#4a7cef',pointBorderColor:'#fff',pointRadius:3},{label:'Industry Median',data:bench,fill:false,borderColor:'#636a7e',borderDash:[5,5],pointRadius:2,pointBackgroundColor:'#636a7e'}]},options:{scales:{r:{beginAtZero:true,max:2,grid:{color:'#1f2430'},angleLines:{color:'#1f2430'},pointLabels:{font:{size:10,family:'DM Sans'}},ticks:{stepSize:.5,backdropColor:'transparent',font:{size:9}}}},plugins:{legend:{labels:{font:{family:'DM Sans',size:11},usePointStyle:true,padding:14}}}}});
+
+  new Chart(document.getElementById('bar'),{type:'bar',data:{labels,datasets:[{label:'Risk Score',data,backgroundColor:cols,borderRadius:5,borderSkipped:false}]},options:{scales:{y:{beginAtZero:true,max:2,grid:{color:'#1f2430'},ticks:{stepSize:.5,font:{size:10,family:'DM Sans'}}},x:{grid:{display:false},ticks:{font:{size:9,family:'DM Sans'}}}},plugins:{legend:{display:false}}}});
+
+  const lo=data.filter(v=>v<0.5).length,me=data.filter(v=>v>=0.5&&v<1.5).length,h=data.filter(v=>v>=1.5).length;
+  new Chart(document.getElementById('donut'),{type:'doughnut',data:{labels:['Low Risk','Medium Risk','High Risk'],datasets:[{data:[lo,me,h],backgroundColor:['#2dd4a0','#f5bc3c','#ef5f5f'],borderWidth:0}]},options:{cutout:'62%',plugins:{legend:{position:'bottom',labels:{font:{family:'DM Sans',size:11},usePointStyle:true,padding:14}}}}});
+}
+
+function exportRpt() {
+  let t='AI GOVERNANCE RISK ASSESSMENT REPORT\n=====================================\n\n';
+  t+=`Use Case: ${S.scr.name}\nInstitution: ${S.scr.inst}\nDate: ${new Date().toLocaleDateString('en-CA')}\nScreening Tier: ${S.scrTier}\n\nDOMAIN SCORES\n-------------\n`;
+  DOMAINS.forEach(d=>{const sc=d.questions.map((_,qi)=>S.ans[d.id+'_'+qi]||0);const avg=sc.reduce((a,b)=>a+b,0)/sc.length;const tier=avg<0.5?'Low':avg<1.5?'Medium':'High';t+=`${d.name}: ${avg.toFixed(1)} (${tier} Risk)\n`;});
+  t+='\nRECOMMENDATIONS\n---------------\n';
+  const ds2={};DOMAINS.forEach(d=>{const sc=d.questions.map((_,qi)=>S.ans[d.id+'_'+qi]||0);ds2[d.id]=sc.reduce((a,b)=>a+b,0)/sc.length;});
+  DOMAINS.filter(d=>ds2[d.id]>=0.5).sort((a,b)=>ds2[b.id]-ds2[a.id]).forEach(d=>{const lv=ds2[d.id]>=1.5?'foundation':'intermediate';t+=`\n${d.name}: ${CONTROLS[d.id][lv]}\n`;});
+  t+='\n---\nMethodology: iTechLaw RAIIA, NIST AI RMF, ISO/IEC 42001, OSFI EDGE Principles, OECD AI Policy Framework.\n';
+  const blob=new Blob([t],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ai-governance-report.txt';a.click();
+}
+
+updProg();
+</script>
+</body>
+</html>
