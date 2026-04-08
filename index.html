@@ -254,6 +254,45 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .rpt-watermark{text-align:center;padding:32px 0 8px;font-size:11px;color:var(--t3);letter-spacing:.06em;text-transform:uppercase}
 .rpt-watermark span{display:inline-block;padding:4px 14px;border:1px solid var(--brd);border-radius:2px;background:var(--s1)}
 
+/* ORIENTATION */
+.ori-hero{text-align:center;padding:48px 0 36px}
+.ori-hero h2{font-family:'Instrument Serif',Georgia,serif;font-size:34px;font-weight:400;color:var(--t1);margin-bottom:14px;line-height:1.25}
+.ori-hero p{font-size:15px;color:var(--t2);max-width:540px;margin:0 auto 32px;line-height:1.65}
+.ori-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
+@media(max-width:600px){.ori-cards{grid-template-columns:1fr}}
+.ori-card{background:var(--s1);border:1px solid var(--brd);border-top:2px solid var(--accent);border-radius:0 0 var(--r2) var(--r2);padding:20px 18px;text-align:left}
+.ori-card-ico{font-size:20px;margin-bottom:10px}
+.ori-card h4{font-size:13px;font-weight:600;color:var(--t1);margin-bottom:5px}
+.ori-card p{font-size:12px;color:var(--t2);line-height:1.55;margin:0}
+.ori-for{background:var(--accent-pale);border:1px solid rgba(26,58,42,.15);border-radius:var(--r2);padding:14px 18px;margin-bottom:24px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.ori-for-label{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.07em;white-space:nowrap}
+.ori-for-tags{display:flex;flex-wrap:wrap;gap:5px}
+.ori-for-tags span{font-size:11px;color:var(--t2);padding:3px 9px;border-radius:2px;background:var(--s1);border:1px solid var(--brd)}
+.ori-meta{display:flex;justify-content:center;gap:20px;margin-bottom:32px;font-size:12px;color:var(--t3);flex-wrap:wrap}
+.ori-meta span{display:flex;align-items:center;gap:5px}
+
+/* HELP TOOLTIPS */
+.help-btn{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:50%;background:var(--accent-pale);border:1px solid rgba(26,58,42,.2);color:var(--accent-l);font-size:9px;font-weight:700;cursor:pointer;vertical-align:middle;margin-left:6px;flex-shrink:0;transition:background .15s}
+.help-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.help-pop{position:fixed;z-index:500;background:var(--s1);border:1px solid var(--brd);border-radius:var(--r2);box-shadow:0 6px 24px rgba(0,0,0,.13);padding:14px 16px;width:280px;font-size:12px;line-height:1.6;color:var(--t2)}
+.help-pop-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.help-pop-hd strong{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
+.help-pop-close{cursor:pointer;color:var(--t3);font-size:16px;line-height:1;padding:0 2px}
+.help-pop-close:hover{color:var(--t1)}
+.help-pop p{margin:0 0 8px;font-size:12px}
+.help-pop .hp-good{background:#f0faf5;border-left:2px solid var(--grn);padding:7px 10px;border-radius:0 2px 2px 0;margin-bottom:6px;font-size:11px}
+.help-pop .hp-gap{background:#fdf3f3;border-left:2px solid var(--red);padding:7px 10px;border-radius:0 2px 2px 0;font-size:11px}
+.help-pop .hp-label{font-weight:600;margin-bottom:2px;font-size:10px;text-transform:uppercase;letter-spacing:.04em}
+.hp-good .hp-label{color:var(--grn)}
+.hp-gap .hp-label{color:var(--red)}
+
+/* REG TOOLTIPS (Stage 1) */
+.reg-tip{position:relative;display:inline-flex;align-items:center;margin-left:5px;cursor:pointer}
+.reg-tip-ico{width:14px;height:14px;border-radius:50%;background:var(--accent-pale);border:1px solid rgba(26,58,42,.2);color:var(--accent-l);font-size:8px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;line-height:1}
+.reg-tip:hover .reg-tip-txt,.reg-tip:focus-within .reg-tip-txt{display:block}
+.reg-tip-txt{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--t1);color:#fff;font-size:11px;line-height:1.5;padding:8px 11px;border-radius:var(--r2);width:220px;z-index:100;pointer-events:none}
+.reg-tip-txt::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--t1)}
+
 /* MISC */
 .divider{height:1px;background:var(--brd);margin:24px 0}
 .hidden{display:none!important}
@@ -286,7 +325,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       </div>
     </div>
     <div class="steps">
-      <div class="step-d on" id="sd1">1</div>
+      <div class="step-d" id="sd1">1</div>
       <div class="step-l" id="sl1"></div>
       <div class="step-d" id="sd2">2</div>
       <div class="step-l" id="sl2"></div>
@@ -297,8 +336,45 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 
 <div class="wrap">
 
+<!-- ===== STAGE 0: ORIENTATION ===== -->
+<div class="view on" id="v0">
+  <div class="ori-hero">
+    <h2>Is your AI ready for regulatory scrutiny?</h2>
+    <p>If your organisation uses AI to make or inform decisions, regulators now expect documented governance around it. This assessment shows you where you stand — and what to do about the gaps.</p>
+    <div class="ori-cards">
+      <div class="ori-card">
+        <div class="ori-card-ico">📊</div>
+        <h4>Your Governance Score</h4>
+        <p>Domain-by-domain scoring across 8 governance areas, benchmarked against peer institutions of your type and size.</p>
+      </div>
+      <div class="ori-card">
+        <div class="ori-card-ico">🔍</div>
+        <h4>Regulatory Gap Analysis</h4>
+        <p>A mapped view of where your controls fall short across OSFI, EU AI Act, PIPEDA/CPPA, and FCA frameworks.</p>
+      </div>
+      <div class="ori-card">
+        <div class="ori-card-ico">🗺️</div>
+        <h4>90-Day Action Plan</h4>
+        <p>Prioritized remediation guidance with technology enablers and a phased roadmap you can take into a board conversation.</p>
+      </div>
+    </div>
+    <div class="ori-for">
+      <div class="ori-for-label">Who this is for</div>
+      <div class="ori-for-tags">
+        <span>CROs</span><span>CIOs</span><span>CISOs</span><span>Model Risk Leads</span><span>Compliance Officers</span><span>AI &amp; Data Leaders</span><span>Risk Committees</span>
+      </div>
+    </div>
+    <div class="ori-meta">
+      <span>⏱ ~15 minutes</span>
+      <span>🔒 Runs entirely in your browser — nothing is transmitted</span>
+      <span>📄 Exportable PDF report</span>
+    </div>
+    <button class="btn btn-p" onclick="go(1)" style="font-size:15px;padding:13px 36px">Begin Assessment →</button>
+  </div>
+</div>
+
 <!-- ===== STAGE 1: SCREENER ===== -->
-<div class="view on" id="v1">
+<div class="view" id="v1">
   <div class="intro">
     <h2>AI Use Case Risk Screener</h2>
     <p>Determine whether your AI use case requires a comprehensive governance assessment. This screening evaluates data sensitivity, decision impact, regulatory exposure, and deployment scope against multi-jurisdictional regulatory expectations.</p>
@@ -414,13 +490,13 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
     <div class="cd-d">Which regulatory frameworks apply to this AI system?</div>
     <div class="fg">
       <div class="cg" id="s1_regs">
-        <div class="ct" data-val="osfi" data-w="3"><div class="cb">✓</div><div><div class="otl">OSFI E-23 / B-13</div><div class="otd">Model risk management, technology risk</div></div></div>
-        <div class="ct" data-val="pipeda" data-w="2"><div class="cb">✓</div><div><div class="otl">PIPEDA / CPPA</div><div class="otd">Federal privacy, automated decisions</div></div></div>
-        <div class="ct" data-val="euai" data-w="3"><div class="cb">✓</div><div><div class="otl">EU AI Act (2024)</div><div class="otd">High-risk AI classification, CE marking</div></div></div>
-        <div class="ct" data-val="fca" data-w="2"><div class="cb">✓</div><div><div class="otl">FCA / PRA (UK)</div><div class="otd">Consumer Duty, operational resilience, SS1/23</div></div></div>
-        <div class="ct" data-val="sec" data-w="2"><div class="cb">✓</div><div><div class="otl">SEC / FINRA (US)</div><div class="otd">Predictive analytics, Reg BI, investment advice</div></div></div>
-        <div class="ct" data-val="pcmltfa" data-w="2"><div class="cb">✓</div><div><div class="otl">PCMLTFA / FINTRAC</div><div class="otd">Anti-money laundering, terrorist financing</div></div></div>
-        <div class="ct" data-val="humanrights" data-w="2"><div class="cb">✓</div><div><div class="otl">Canadian Human Rights Act</div><div class="otd">Anti-discrimination, fair treatment</div></div></div>
+        <div class="ct" data-val="osfi" data-w="3"><div class="cb">✓</div><div><div class="otl">OSFI E-23 / B-13 <span class="reg-tip"><span class="reg-tip-ico">i</span><span class="reg-tip-txt">Canada's federal banking regulator. E-23 governs model risk management; B-13 covers technology and cyber risk. Mandatory for all federally regulated financial institutions.</span></span></div><div class="otd">Model risk management, technology risk</div></div></div>
+        <div class="ct" data-val="pipeda" data-w="2"><div class="cb">✓</div><div><div class="otl">PIPEDA / CPPA <span class="reg-tip"><span class="reg-tip-ico">i</span><span class="reg-tip-txt">Canada's federal privacy laws. PIPEDA is current law; CPPA is its successor. Both require transparency and explainability when AI makes or influences decisions about individuals.</span></span></div><div class="otd">Federal privacy, automated decisions</div></div></div>
+        <div class="ct" data-val="euai" data-w="3"><div class="cb">✓</div><div><div class="otl">EU AI Act (2024) <span class="reg-tip"><span class="reg-tip-ico">i</span><span class="reg-tip-txt">The EU's landmark AI regulation (2024/1689). Classifies AI by risk level — high-risk systems (e.g. credit scoring, hiring, biometrics) face strict obligations. Applies if you operate in or serve EU markets.</span></span></div><div class="otd">High-risk AI classification, CE marking</div></div></div>
+        <div class="ct" data-val="fca" data-w="2"><div class="cb">✓</div><div><div class="otl">FCA / PRA (UK) <span class="reg-tip"><span class="reg-tip-ico">i</span><span class="reg-tip-txt">UK Financial Conduct Authority and Prudential Regulation Authority. Consumer Duty (2023) requires firms to demonstrate good outcomes for retail customers — including from AI-driven decisions.</span></span></div><div class="otd">Consumer Duty, operational resilience, SS1/23</div></div></div>
+        <div class="ct" data-val="sec" data-w="2"><div class="cb">✓</div><div><div class="otl">SEC / FINRA (US) <span class="reg-tip"><span class="reg-tip-ico">i</span><span class="reg-tip-txt">US Securities and Exchange Commission and FINRA. Proposed rules target predictive analytics and conflicts of interest in AI-driven investment recommendations (Reg BI). Relevant if you have US clients or operations.</span></span></div><div class="otd">Predictive analytics, Reg BI, investment advice</div></div></div>
+        <div class="ct" data-val="pcmltfa" data-w="2"><div class="cb">✓</div><div><div class="otl">PCMLTFA / FINTRAC <span class="reg-tip"><span class="reg-tip-ico">i</span><span class="reg-tip-txt">Canada's anti-money laundering law. If your AI is used in transaction monitoring, fraud detection, or KYC/identity verification, FINTRAC expects documented controls and explainable decisions.</span></span></div><div class="otd">Anti-money laundering, terrorist financing</div></div></div>
+        <div class="ct" data-val="humanrights" data-w="2"><div class="cb">✓</div><div><div class="otl">Canadian Human Rights Act <span class="reg-tip"><span class="reg-tip-ico">i</span><span class="reg-tip-txt">Prohibits discrimination in federally regulated services on grounds including race, gender, age, and disability. Applies directly to AI systems that influence credit, employment, insurance, or service decisions.</span></span></div><div class="otd">Anti-discrimination, fair treatment</div></div></div>
         <div class="ct" data-val="none" data-w="0"><div class="cb">✓</div><div><div class="otl">None / Uncertain</div><div class="otd">No known regulatory requirements</div></div></div>
       </div>
     </div>
@@ -565,6 +641,147 @@ const VERTICAL_Q = {
     { domain:'transparency', text:"Can the clinical AI system provide clinician-interpretable explanations — including confidence intervals, training population demographics, and documented edge-case limitations?", regs:['Health Canada SaMD Guidance','EU AI Act Art.13','NIST MEA 2.7','⬡ Healthcare Profile'] },
   ],
   general: []
+};
+
+// ============================================================
+//  QUESTION HELP — plain-language guidance per question
+// ============================================================
+const QHELP = {
+  ethical_0:{
+    plain:"This asks whether someone in authority has formally approved this AI system — not just the project, but specifically what it's for and how it aligns with your institution's values and responsible AI policy.",
+    good:"A use case approval document signed by a named executive or committee, explicitly tied to your responsible AI policy. The purpose is on record before deployment.",
+    gap:"AI deployed on business sign-off only, with no documented purpose statement or ethics/governance review."
+  },
+  ethical_1:{
+    plain:"Beyond technical testing — has anyone asked who might be negatively affected by this AI? Including customers who aren't directly using it, vulnerable populations, or groups whose data is used in training.",
+    good:"A structured impact assessment on file, reviewed by compliance or legal, covering potential harms, affected groups, and documented mitigations.",
+    gap:"No assessment exists beyond technical performance testing. No human or societal harm lens was applied."
+  },
+  accountability_0:{
+    plain:"Someone specific — by name and role — should be accountable for every AI system. Not 'the team' or 'the vendor'. Regulators expect to point to a person when something goes wrong.",
+    good:"A RACI matrix or accountability register naming the model owner, validation lead, and the senior manager accountable per OSFI E-23. For FCA firms, aligned to SM&CR.",
+    gap:"Accountability is assumed or informally shared. No named individual is documented as responsible for the AI system's outcomes."
+  },
+  accountability_1:{
+    plain:"If the model starts making bad decisions or causes harm — what happens next? This question asks whether that process is written down and tested, not just assumed.",
+    good:"An AI-specific incident playbook with escalation triggers, response steps, regulator notification thresholds, and a remediation tracking process.",
+    gap:"Relying on generic IT incident response. No AI-specific escalation or remediation procedure exists."
+  },
+  transparency_0:{
+    plain:"Can a frontline employee explain to a customer why the AI made a decision about them — in plain language, within a reasonable timeframe? Regulators increasingly require this ability.",
+    good:"Decision logs, explainability output (e.g. SHAP/LIME), or model cards that enable staff to give a plain-language explanation. Adverse action notices issued where required.",
+    gap:"Only data scientists can interpret what the model did. No mechanism exists for customer-facing explanation of AI decisions."
+  },
+  transparency_1:{
+    plain:"Comprehensive documentation covering the full model lifecycle — not just the code, but why design decisions were made, what data was used, what limitations exist, and what changed over time.",
+    good:"A model card or technical specification document that would satisfy an OSFI examiner: training data description, validation results, known limitations, change log.",
+    gap:"Documentation lives in data scientists' notebooks or informal wikis. No structured, regulator-ready documentation exists."
+  },
+  fairness_0:{
+    plain:"Before deployment, did you test whether the model produces different outcomes for different demographic groups — including groups that aren't directly in the inputs but might be proxied by other variables?",
+    good:"Statistical fairness testing across all CHRA-protected grounds (race, gender, age, disability, etc.) with documented methodology and compliance sign-off.",
+    gap:"Only accuracy or AUC metrics tested. No demographic breakdown or disparate impact analysis was performed."
+  },
+  fairness_1:{
+    plain:"A one-time pre-launch fairness test isn't enough. This asks whether you're actively watching for fairness issues in production — and have a process to fix them when found.",
+    good:"Production dashboards tracking fairness metrics with automated alerts, a remediation workflow, and a documented governance escalation process.",
+    gap:"Fairness was tested at launch but there is no ongoing monitoring. Issues emerging in production would not be automatically detected."
+  },
+  safety_0:{
+    plain:"Was the model validated by someone independent of the team that built it? OSFI E-23 specifically requires independent challenge — this is one of the most commonly cited gaps in regulatory examinations.",
+    good:"Independent validation by model risk management, internal audit, or a qualified external party. Results documented including edge-case and adversarial testing.",
+    gap:"Model validated only by its developers. No independent challenge or adversarial testing was performed before deployment."
+  },
+  safety_1:{
+    plain:"Once deployed, is the model being actively monitored? This covers accuracy degrading over time, input data shifting, and what happens when something goes wrong.",
+    good:"An ML monitoring platform with drift detection, performance alerting, documented rollback procedures, and an incident response plan aligned to OSFI B-13.",
+    gap:"Manual monitoring only, or no systematic monitoring in place. Model health is assessed reactively, not proactively."
+  },
+  data_0:{
+    plain:"Before using data to train or run an AI model, was it reviewed for quality? This includes whether it's accurate, complete, representative, and actually appropriate for the specific use case.",
+    good:"Documented data quality rules, automated validation checks, and a fitness-for-use sign-off before training data is approved. Known limitations documented.",
+    gap:"Data used as-is from production systems without formal quality review or fitness-for-use assessment."
+  },
+  data_1:{
+    plain:"Can you trace where every piece of training data came from, how it was transformed, and what version was used? Regulators examining AI model risk increasingly require this.",
+    good:"A data catalog or lineage tool showing end-to-end provenance — including third-party data sources, open datasets, and version history.",
+    gap:"'We pulled it from the data warehouse' — no formal lineage documentation. Third-party data sources not inventoried or assessed."
+  },
+  privacy_0:{
+    plain:"Is there a documented legal reason for using personal information in this AI system? Under PIPEDA and CPPA, automated processing of personal data requires clear consent or legitimate interest grounds.",
+    good:"Processing records documenting legal basis, consent mechanisms, data minimization, and purpose limitation for every personal data use in the AI system.",
+    gap:"Consent assumed or not specifically obtained for automated decision-making. No records of legal basis for personal data processing."
+  },
+  privacy_1:{
+    plain:"Privacy-by-design means building privacy protections in from the start. A Privacy Impact Assessment (PIA) is typically required before deploying any AI that processes personal information.",
+    good:"PIA on file before deployment, reviewed and signed off. De-identification or pseudonymization used where possible. Data subject rights workflow in place.",
+    gap:"No PIA exists, or it was completed after deployment. Data subject rights not mapped to the AI system."
+  },
+  thirdparty_0:{
+    plain:"If an AI vendor fails, gets breached, or is acquired — what's your exposure? OSFI B-10 requires documented oversight of third-party AI providers, not just standard IT vendor management.",
+    good:"AI-specific vendor due diligence questionnaires, contractual provisions covering audit rights, incident notification, and data ownership. Annual vendor review cycle in place.",
+    gap:"Standard IT vendor agreement in place with no AI-specific provisions. No due diligence on the AI component of vendor services."
+  },
+  thirdparty_1:{
+    plain:"When an AI system generates content, decisions, or code — who legally owns that output? What are the licensing terms for the foundation model you're using? These carry real legal risk.",
+    good:"Legal review of foundation model terms of service, documented IP ownership position for AI-generated outputs, indemnification clauses for third-party IP claims.",
+    gap:"No legal review of foundation model licensing terms. IP ownership of AI-generated outputs not addressed in governance or legal frameworks."
+  },
+  genai_transparency:{
+    plain:"Customers and end users should know when they're interacting with AI. This is increasingly a legal requirement — EU AI Act Art. 50 mandates disclosure for many GenAI interactions.",
+    good:"Clear labeling on AI-generated content, confidence or uncertainty indicators, hallucination risk disclosure, and user guidance on AI limitations.",
+    gap:"AI-generated content presented as human-authored. No disclosure mechanism or user awareness about AI limitations."
+  },
+  genai_safety:{
+    plain:"Generative AI systems can be manipulated through adversarial prompts to produce harmful, confidential, or misleading outputs. Has this been actively tested and mitigated?",
+    good:"Documented prompt injection testing, output filtering rules (toxicity, PII, harmful content), human escalation triggers, and ongoing red-teaming.",
+    gap:"No adversarial prompt testing. Content filtering relies solely on the base model's built-in guardrails."
+  },
+  genai_accountability:{
+    plain:"Do employees know what they are and aren't allowed to do with generative AI tools? Without a formal policy, employees may inadvertently expose sensitive data or violate regulations.",
+    good:"Written acceptable use policy covering permitted uses, prohibited uses, data classification rules for GenAI inputs, and training completion records.",
+    gap:"No formal policy. Employees using GenAI tools on an ad hoc basis without documented governance boundaries."
+  },
+  credit_fairness:{
+    plain:"Credit models can discriminate through proxy variables — inputs that correlate with protected characteristics even when those characteristics aren't directly included. This asks if that was tested.",
+    good:"Adverse impact analysis across all CHRA-protected characteristics, including proxy variable analysis, documented and signed off before model deployment.",
+    gap:"No disparate impact testing beyond standard model performance metrics."
+  },
+  credit_transparency:{
+    plain:"In Canada, applicants who are denied credit based on automated decisions have the right to understand why. This asks whether that adverse action notice process is in place.",
+    good:"Automated adverse action notices explaining the primary factors behind unfavorable credit decisions, in plain language, per CPPA §63 requirements.",
+    gap:"No formal adverse action notice process for AI-driven credit decisions. Customers receive generic denial letters."
+  },
+  insurance_fairness:{
+    plain:"Insurance AI can inadvertently use behavioral or geographic variables that act as proxies for gender, race, or religion — which are prohibited rating factors. Has this been tested?",
+    good:"Independent testing for prohibited rating factor proxies, documented methodology, and regulatory review where required by provincial insurance regulators.",
+    gap:"No testing for prohibited factor proxies. Model approved based on actuarial performance only."
+  },
+  insurance_safety:{
+    plain:"AI underwriting and claims decisions in insurance require independent actuarial review and, in some jurisdictions, regulatory filing or approval before use.",
+    good:"Independent actuarial validation, stress testing across loss scenarios, and confirmed regulatory approval or exemption status where required.",
+    gap:"AI-driven underwriting deployed without independent actuarial review or regulatory filing."
+  },
+  trading_safety:{
+    plain:"Algorithmic trading systems can cause or exacerbate market disruptions. Regulators require pre-deployment testing, real-time circuit breakers, and post-trade surveillance.",
+    good:"Simulation testing across stress scenarios, documented kill-switch capability, real-time circuit breakers, and automated post-trade surveillance for market integrity.",
+    gap:"No circuit breaker or kill-switch capability. Minimal pre-deployment simulation testing. No real-time market integrity surveillance."
+  },
+  trading_accountability:{
+    plain:"Algorithmic trading governance requires a documented risk framework covering how the model is changed, what exposure limits apply, and how it's shut down in an emergency.",
+    good:"Documented market risk governance framework with change control process, concentration limits, emergency shutdown procedures, and escalation playbook.",
+    gap:"No formal framework. Trading model changes managed informally. Emergency shutdown procedure not documented."
+  },
+  healthcare_safety:{
+    plain:"Clinical AI that influences diagnosis or treatment decisions is considered a medical device in most jurisdictions and requires clinical validation studies before deployment.",
+    good:"Clinical validation study demonstrating safety and efficacy, Health Canada Software as a Medical Device (SaMD) review completed, and post-market surveillance plan in place.",
+    gap:"Deployed based on technical performance metrics only. No clinical validation study or regulatory review conducted."
+  },
+  healthcare_transparency:{
+    plain:"Clinicians need to understand and trust AI recommendations to use them safely. This asks whether the system can explain its outputs in terms that are meaningful to clinical staff.",
+    good:"Clinician-interpretable explanations with confidence intervals, training population demographics, and clearly documented edge-case limitations.",
+    gap:"Model outputs are black-box. Clinical staff cannot assess when to override or question the AI recommendation."
+  }
 };
 
 // ============================================================
@@ -849,10 +1066,11 @@ function buildDeep() {
         ${qs.map((q,qi)=>{
           const isVert = (q.regs||[]).some(r=>r.startsWith('⬡'));
           const regsClean = (q.regs||[]).filter(r=>!r.startsWith('⬡'));
+          const helpKey = isVert ? `${S.vertical}_${d.id}` : `${d.id}_${qi}`;
           return `
           <div class="qc" ${isVert?'style="border-left:2px solid #a78bfa"':''}>
             ${isVert?`<div class="vertical-tag">⬡ ${vNames[S.vertical]||'Profile'} — Supplemental Question</div>`:''}
-            <div class="qt">${q.text}</div>
+            <div class="qt">${q.text}<button class="help-btn" onclick="showHelp(event,'${helpKey}')" title="Guidance &amp; examples">?</button></div>
             <div class="qr">${regsClean.map(r=>`<span>${r}</span>`).join('')}</div>
             <div class="arow5">
               <button class="abtn5" onclick="ans('${d.id}',${qi},0,this)"><span class="av">✓</span><span class="al">Compliant</span></button>
@@ -887,6 +1105,37 @@ function swDom(i) {
   const sec = document.getElementById('ds_'+i);
   if(sec) sec.scrollIntoView({behavior:'smooth', block:'start'});
 }
+
+// ============================================================
+//  HELP POPOVER
+// ============================================================
+function showHelp(e, key) {
+  e.stopPropagation();
+  const existing = document.getElementById('helpPop');
+  if(existing) { existing.remove(); return; }
+  const h = QHELP[key];
+  if(!h) return;
+  const pop = document.createElement('div');
+  pop.className = 'help-pop'; pop.id = 'helpPop';
+  pop.innerHTML = `
+    <div class="help-pop-hd">
+      <strong>Guidance</strong>
+      <span class="help-pop-close" onclick="document.getElementById('helpPop').remove()">×</span>
+    </div>
+    <p>${h.plain}</p>
+    <div class="hp-good"><div class="hp-label">✓ What good looks like</div>${h.good}</div>
+    <div class="hp-gap"><div class="hp-label">✗ Common gap</div>${h.gap}</div>`;
+  document.body.appendChild(pop);
+  const rect = e.currentTarget.getBoundingClientRect();
+  const pw = 280, margin = 10;
+  let left = rect.left + rect.width/2 - pw/2;
+  let top = rect.bottom + 8 + window.scrollY;
+  left = Math.max(margin, Math.min(left, window.innerWidth - pw - margin));
+  pop.style.cssText = `left:${left}px;top:${top}px`;
+}
+document.addEventListener('click', () => {
+  const p = document.getElementById('helpPop'); if(p) p.remove();
+});
 
 function ans(did, qi, v, btn) {
   S.ans[did+'_'+qi] = v;
