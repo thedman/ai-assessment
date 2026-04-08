@@ -115,11 +115,11 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .fl-ico{width:20px;height:20px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
 
 /* DEEP ASSESSMENT */
-.dnav{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:24px}
+.dnav{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:0;position:sticky;top:0;z-index:20;background:var(--bg);padding:10px 0 10px;border-bottom:1px solid var(--brd);margin-left:-20px;margin-right:-20px;padding-left:20px;padding-right:20px}
 .dtab{padding:6px 12px;border-radius:2px;font-size:12px;font-weight:500;cursor:pointer;transition:border-color .15s,color .15s,background .15s;border:1px solid var(--brd);background:var(--s1);color:var(--t3)}
 .dtab:hover{border-color:var(--accent-l);color:var(--accent)}.dtab.on{border-color:var(--accent);color:var(--accent);background:var(--accent-pale)}
 .tscore{display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:5px}
-.dsec{display:none}.dsec.on{display:block;animation:up .3s ease}
+.dsec{display:block;padding-top:24px}
 .qc{background:var(--s1);border:1px solid var(--brd);border-radius:var(--r);padding:20px;margin-bottom:12px}
 .qt{font-size:14px;font-weight:400;margin-bottom:4px;line-height:1.55;color:var(--t1)}
 .qr{font-size:10px;color:var(--t3);margin-bottom:12px;display:flex;gap:5px;flex-wrap:wrap}
@@ -842,7 +842,7 @@ function buildDeep() {
   document.getElementById('dsecs').innerHTML = DOMAINS.map((d,di)=>{
     const qs = domainQs[d.id];
     return `
-    <div class="dsec ${di===0?'on':''}" id="ds_${di}">
+    <div class="dsec" id="ds_${di}">
       <div class="cd">
         <div class="cd-h"><div class="cd-ico" style="background:var(--blue-g);color:var(--blue)">${d.icon}</div><h2>${d.name}</h2></div>
         <div class="cd-d">${d.desc}</div>
@@ -868,12 +868,24 @@ function buildDeep() {
   }).join('');
 
   updProg();
+
+  // Highlight nav tab matching the section currently most visible in viewport
+  const navObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting) {
+        const idx = parseInt(e.target.id.replace('ds_',''));
+        document.querySelectorAll('.dtab').forEach((t,j) => t.classList.toggle('on', j===idx));
+        S.aDom = idx;
+      }
+    });
+  }, {rootMargin:'-20% 0px -60% 0px', threshold:0});
+  document.querySelectorAll('.dsec').forEach(s => navObs.observe(s));
 }
 
 function swDom(i) {
   S.aDom=i;
-  document.querySelectorAll('.dtab').forEach((t,j)=>t.classList.toggle('on',j===i));
-  document.querySelectorAll('.dsec').forEach((s,j)=>s.classList.toggle('on',j===i));
+  const sec = document.getElementById('ds_'+i);
+  if(sec) sec.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function ans(did, qi, v, btn) {
