@@ -212,6 +212,12 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .rdmp-tasks li{font-size:11px;color:var(--t2);padding:3px 0;display:flex;align-items:flex-start;gap:6px;line-height:1.5}
 .rdmp-tasks li::before{content:'→';color:var(--accent-l);flex-shrink:0;font-weight:500}
 
+/* METHODOLOGY NOTE */
+.meth-note{display:flex;gap:9px;align-items:flex-start;background:var(--s2);border:1px solid var(--brd);border-radius:var(--r2);padding:10px 12px;margin-top:14px}
+.meth-note-ico{font-size:12px;color:var(--t3);flex-shrink:0;margin-top:1px}
+.meth-note p{font-size:10.5px;color:var(--t3);line-height:1.6;margin:0}
+.meth-note strong{color:var(--t2);font-weight:600}
+
 /* BENCHMARKING */
 .bm-row{display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid var(--brd)}
 .bm-row:last-child{border-bottom:none}
@@ -1282,12 +1288,16 @@ function renderRpt() {
     <!-- ===== INDUSTRY BENCHMARKING ===== -->
     <div class="rsec"><h3>Industry Benchmarking</h3>
       <div class="cd">
-        <p style="font-size:12px;color:var(--t2);margin-bottom:10px">Your scores vs. ${instNames[inst]||'FRFI'} industry percentiles. Lower score = stronger governance. Benchmarks based on published governance maturity surveys and OSFI supervisory observations (2023–2024).</p>
+        <p style="font-size:12px;color:var(--t2);margin-bottom:10px">Your scores vs. ${instNames[inst]||'FRFI'} industry percentiles. <strong>Lower score = stronger governance.</strong> A score below the median line means your controls in that domain are ahead of the typical peer institution.</p>
         <div class="bm-legend">
           <div class="bm-leg-item"><div style="width:12px;height:3px;background:var(--t1);display:inline-block;border-radius:1px"></div>&nbsp;Your score</div>
           <div class="bm-leg-item"><div style="width:2px;height:10px;background:var(--grn);opacity:.8;display:inline-block"></div>&nbsp;Top quartile</div>
           <div class="bm-leg-item"><div style="width:2px;height:10px;background:var(--t1);display:inline-block"></div>&nbsp;Median</div>
           <div class="bm-leg-item"><div style="width:2px;height:10px;background:var(--org);opacity:.8;display:inline-block"></div>&nbsp;Bottom quartile</div>
+        </div>
+        <div class="meth-note">
+          <span class="meth-note-ico">ℹ</span>
+          <p><strong>Benchmark methodology:</strong> Quartile values are calibrated reference points derived from published regulatory examination findings (OSFI, FCA), AI governance maturity research (NIST AI RMF, ISO 42001 adoption studies), and practitioner experience across regulated financial services. They represent illustrative peer approximations, not outputs from a statistical survey panel, and will be updated as empirical data becomes available.</p>
         </div>
         ${DOMAINS.map(d=>{
           const s=ds[d.id], b=bm[d.id]||{q25:.6,med:1.2,q75:1.7};
