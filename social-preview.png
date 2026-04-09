@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="627" viewBox="0 0 1200 627">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a3a2a"/>
+      <stop offset="100%" style="stop-color:#0f2218"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.06"/>
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.02"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="627" fill="url(#bg)"/>
+
+  <!-- Subtle grid lines -->
+  <line x1="0" y1="209" x2="1200" y2="209" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+  <line x1="0" y1="418" x2="1200" y2="418" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+  <line x1="400" y1="0" x2="400" y2="627" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+  <line x1="800" y1="0" x2="800" y2="627" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+
+  <!-- Shield icon -->
+  <text x="88" y="148" font-family="system-ui" font-size="72" fill="rgba(255,255,255,0.9)">🛡</text>
+
+  <!-- Main title -->
+  <text x="88" y="230" font-family="Georgia, serif" font-size="56" font-weight="400" fill="#ffffff" letter-spacing="-0.5">AI Governance</text>
+  <text x="88" y="298" font-family="Georgia, serif" font-size="56" font-weight="400" fill="#ffffff" letter-spacing="-0.5">Risk Assessment</text>
+
+  <!-- Divider -->
+  <rect x="88" y="328" width="60" height="2" fill="rgba(255,255,255,0.35)" rx="1"/>
+
+  <!-- Subtitle -->
+  <text x="88" y="375" font-family="system-ui, sans-serif" font-size="22" font-weight="400" fill="rgba(255,255,255,0.65)">For Regulated Financial Institutions</text>
+
+  <!-- Domain pills -->
+  <rect x="88" y="418" width="160" height="34" rx="4" fill="rgba(255,255,255,0.1)"/>
+  <text x="168" y="440" font-family="system-ui, sans-serif" font-size="13" fill="rgba(255,255,255,0.75)" text-anchor="middle">8 Governance Domains</text>
+
+  <rect x="262" y="418" width="130" height="34" rx="4" fill="rgba(255,255,255,0.1)"/>
+  <text x="327" y="440" font-family="system-ui, sans-serif" font-size="13" fill="rgba(255,255,255,0.75)" text-anchor="middle">OSFI · EU AI Act</text>
+
+  <rect x="406" y="418" width="155" height="34" rx="4" fill="rgba(255,255,255,0.1)"/>
+  <text x="483" y="440" font-family="system-ui, sans-serif" font-size="13" fill="rgba(255,255,255,0.75)" text-anchor="middle">PIPEDA · FCA · SEC</text>
+
+  <rect x="575" y="418" width="145" height="34" rx="4" fill="rgba(255,255,255,0.1)"/>
+  <text x="647" y="440" font-family="system-ui, sans-serif" font-size="13" fill="rgba(255,255,255,0.75)" text-anchor="middle">90-Day Action Plan</text>
+
+  <!-- Right side decorative card -->
+  <rect x="820" y="80" width="300" height="460" rx="8" fill="url(#card)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+
+  <!-- Card content - score bars -->
+  <text x="848" y="128" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="rgba(255,255,255,0.5)" letter-spacing="0.08em">GOVERNANCE SCORE</text>
+
+  <!-- Domain score bars -->
+  <text x="848" y="168" font-family="system-ui, sans-serif" font-size="12" fill="rgba(255,255,255,0.5)">Ethical Purpose</text>
+  <rect x="848" y="176" width="240" height="5" rx="2" fill="rgba(255,255,255,0.1)"/>
+  <rect x="848" y="176" width="192" height="5" rx="2" fill="#4ade80"/>
+
+  <text x="848" y="210" font-family="system-ui, sans-serif" font-size="12" fill="rgba(255,255,255,0.5)">Accountability</text>
+  <rect x="848" y="218" width="240" height="5" rx="2" fill="rgba(255,255,255,0.1)"/>
+  <rect x="848" y="218" width="144" height="5" rx="2" fill="#facc15"/>
+
+  <text x="848" y="252" font-family="system-ui, sans-serif" font-size="12" fill="rgba(255,255,255,0.5)">Transparency</text>
+  <rect x="848" y="260" width="240" height="5" rx="2" fill="rgba(255,255,255,0.1)"/>
+  <rect x="848" y="260" width="96" height="5" rx="2" fill="#f87171"/>
+
+  <text x="848" y="294" font-family="system-ui, sans-serif" font-size="12" fill="rgba(255,255,255,0.5)">Fairness</text>
+  <rect x="848" y="302" width="240" height="5" rx="2" fill="rgba(255,255,255,0.1)"/>
+  <rect x="848" y="302" width="168" height="5" rx="2" fill="#4ade80"/>
+
+  <text x="848" y="336" font-family="system-ui, sans-serif" font-size="12" fill="rgba(255,255,255,0.5)">Safety &amp; Resilience</text>
+  <rect x="848" y="344" width="240" height="5" rx="2" fill="rgba(255,255,255,0.1)"/>
+  <rect x="848" y="344" width="120" height="5" rx="2" fill="#facc15"/>
+
+  <text x="848" y="378" font-family="system-ui, sans-serif" font-size="12" fill="rgba(255,255,255,0.5)">Data Governance</text>
+  <rect x="848" y="386" width="240" height="5" rx="2" fill="rgba(255,255,255,0.1)"/>
+  <rect x="848" y="386" width="72" height="5" rx="2" fill="#f87171"/>
+
+  <text x="848" y="420" font-family="system-ui, sans-serif" font-size="12" fill="rgba(255,255,255,0.5)">Privacy</text>
+  <rect x="848" y="428" width="240" height="5" rx="2" fill="rgba(255,255,255,0.1)"/>
+  <rect x="848" y="428" width="210" height="5" rx="2" fill="#4ade80"/>
+
+  <text x="848" y="462" font-family="system-ui, sans-serif" font-size="12" fill="rgba(255,255,255,0.5)">Third-Party Risk</text>
+  <rect x="848" y="470" width="240" height="5" rx="2" fill="rgba(255,255,255,0.1)"/>
+  <rect x="848" y="470" width="132" height="5" rx="2" fill="#facc15"/>
+
+  <!-- Bottom attribution -->
+  <text x="88" y="582" font-family="system-ui, sans-serif" font-size="16" fill="rgba(255,255,255,0.35)">davidamccrory.github.io/ai-assessment</text>
+  <text x="1112" y="582" font-family="system-ui, sans-serif" font-size="16" fill="rgba(255,255,255,0.35)" text-anchor="end">David McCrory</text>
+</svg>
